@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+	<account-config>
+		<account>c90a918b859bd1e56cf99af6246b128e</account>
+		<password>912553e26d53e721261c756d24e3e1cd</password>
+	</account-config>
+	<system-config>
+		<!-- 0 - LCD, 1 - LED-->
+		<lcd_led_flag>0</lcd_led_flag>
+		<module_name>LCDController</module_name>
+		<version>1.4.0</version>
+		<station_id>STN_102</station_id>
+		<device_id>LCD12456</device_id>
+		<platform_id>1</platform_id>
+		<!-- 0 - stdout, 1 - file-->
+		<swlog_direct>0</swlog_direct>
+		<screen_width>1920</screen_width>
+		<screen_height>1080</screen_height>
+	</system-config>
+	<server-config>
+		<centerserver_ip>192.168.229.200</centerserver_ip>
+		<centerserver_port>443</centerserver_port>
+		<websocket_port>80</websocket_port>
+		<interserver_ip>192.168.101.30</interserver_ip>
+		<interserver_port>443</interserver_port>
+	</server-config>
+	<live-config>
+		<multicast_ip>239.0.10.6</multicast_ip>
+		<multicast_port>1234</multicast_port>
+		<detect_timeout>1</detect_timeout>
+		<videosync_server>0</videosync_server>
+		<videosync_clientip>192.168.101.239</videosync_clientip>
+	</live-config>
+	<json-config>
+		<schedules_list_filename>schedule_list.json</schedules_list_filename>
+		<schedules_filename>schedule_details.json</schedules_filename>
+		<layout_groups_filename>layout_groups.json</layout_groups_filename>
+		<resources_filename>resources.json</resources_filename>
+	</json-config>
+	<api-config>
+		<login_subpath>/api/v1/login</login_subpath>
+		<refresh_subpath>/api/v1/refresh</refresh_subpath>
+		<schedules_list_subpath>/api/v1/schedules?device=</schedules_list_subpath>
+		<schedule_subpath>/api/v1/schedules/</schedule_subpath>
+		<layoutgroup_subpath>/api/v1/layout_group/</layoutgroup_subpath>
+		<resource_subpath>/api/v1/medias/</resource_subpath>
+		<resource_info_subpath>/api/v1/resource_info/</resource_info_subpath>
+		<resource_content_subpath>/api/v1/resource/</resource_content_subpath>
+		<opsmsg_list_subpath>/api/v1/operational_messages?device=</opsmsg_list_subpath>
+		<opsmsg_detail_subpath>/api/v1/operational_messages/</opsmsg_detail_subpath>
+		<ops_reply_subpath>/api/v1/operational_messages/</ops_reply_subpath>
+		<cmd_list_subpath>/api/v1/commands?device=</cmd_list_subpath>
+		<cmd_subpath>/api/v1/commands/</cmd_subpath>
+		<cmd_rply_subpath>/api/v1/device_commands/</cmd_rply_subpath>
+		<dev_status_subpath>/api/v1/logs/current_status/</dev_status_subpath>
+		<download_file>/api/v1/resource/</download_file>
+		<upload_file>/api/v1/logs?file=</upload_file>
+		<arrival_info_subpath>/api/v1/arrival_information?device=</arrival_info_subpath>
+		<train_time_subpath>/api/v1/fl_train_config?device=</train_time_subpath>
+		<!--Websocket server api path-->
+		<server_subpath>/api/v1/message/</server_subpath>
+	</api-config>
+	<file-config>
+		<download_rootdir>/home/workspace/</download_rootdir>
+		<schedule_downloadpath>/schedule/download/</schedule_downloadpath>
+		<schedule_playpath>/schedule/play/</schedule_playpath>
+		<swlog_path>/home/workspace/</swlog_path>
+		<!-- The file path of media content -->
+		<content_path>media/</content_path>
+	</file-config>
+	<snapshot-config>
+		<snapshot_enable>0</snapshot_enable>
+		<snapshot_period>600</snapshot_period>
+		<snapshot_height>600</snapshot_height>
+		<snapshot_width>800</snapshot_width>
+		<snapshot_suffix>.jpg</snapshot_suffix>
+		<!-- the store path of snapshots -->
+		<snapshot_path>/home/workspace/log/snapshot/</snapshot_path>
+	</snapshot-config>
+	<housekeeping-config>
+		<!-- house keeping period,unit(day) -->
+		<housekeeping_period>7</housekeeping_period>
+		<coredump_number>7</coredump_number>
+	</housekeeping-config>
+	<log-config>
+		<software_logpath>/home/workspace/log/software/</software_logpath>
+		<watchdog_logpath>/home/workspace/log/watchdog/</watchdog_logpath>
+		<coredump_logpath>/home/workspace/log/coredump/</coredump_logpath>
+	</log-config>
+	<monitor-config>
+		<lcd_monitor_DEV_10151>
+			<monitor_deviceport>/dev/ttyS0</monitor_deviceport>
+			<monitor_baudrate>9600</monitor_baudrate>
+			<monitor_databits>8</monitor_databits>
+			<monitor_stopbits>1</monitor_stopbits>
+			<monitor_parity>0</monitor_parity>
+			<monitor_flowctrl>0</monitor_flowctrl>
+		</lcd_monitor_DEV_10151>
+	</monitor-config>
+	<report-config>
+		<!-- The status report period(s) -->
+		<status_report_period>60</status_report_period>
+	</report-config>
+	<ntp-config>
+		<ntp_enable>1</ntp_enable>
+		<ntp_server>192.168.101.38</ntp_server>
+		<ntpdate_period>600</ntpdate_period>
+	</ntp-config>
+	<lcdpoweronoff-config>
+		<shutdown_lcdpanel>010000</shutdown_lcdpanel>
+		<poweron_lcdpanel>040000</poweron_lcdpanel>
+	</lcdpoweronoff-config>
+	<arrivalmsg-config>
+		<signalinterrupt_duration>60</signalinterrupt_duration>
+	</arrivalmsg-config>
+</config>

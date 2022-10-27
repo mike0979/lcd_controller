@@ -1,0 +1,11 @@
+/home/hq/ClionProjects/lcd_player/cmake-build-release/CMakeFiles/edit_cache.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/CMakeFiles/rebuild_cache.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/ControllerIPCall/CMakeFiles/ControllerIPCall.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/ControllerIPCall/CMakeFiles/edit_cache.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/ControllerIPCall/CMakeFiles/rebuild_cache.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/LCDController/CMakeFiles/LCDController.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/LCDController/CMakeFiles/edit_cache.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/LCDController/CMakeFiles/rebuild_cache.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/utilswapper/CMakeFiles/utilswapper.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/utilswapper/CMakeFiles/edit_cache.dir
+/home/hq/ClionProjects/lcd_player/cmake-build-release/src/utilswapper/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,6 @@
+/snap/clion/209/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/snap/clion/209/bin/ninja/linux/ninja -G Ninja -S /home/hq/ClionProjects/lcd_player -B /home/hq/ClionProjects/lcd_player/cmake-build-debug
+-- build type:
+-- CXX_FLAGS = -Wno-unused-local-typedefs -Wno-unused-function -std=c++11 -rdynamic -D_GLIBCXX_USE_CXX11_ABI=0 
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/hq/ClionProjects/lcd_player/cmake-build-debug
