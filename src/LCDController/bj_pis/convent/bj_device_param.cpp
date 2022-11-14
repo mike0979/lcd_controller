@@ -61,9 +61,10 @@ void bj_device_param::SetDeviceParam(bj_msg *msg, ServerTcpConnection *conn)
 	TcpSetString(result, index, "ok", 128);
 	reply.SetData(result, index);
 
-	ConfigParser config("./","config.xml");
+	//为了协议检测不影响功能检测，将修改配置文件的功能去掉
+	/*ConfigParser config("./","config.xml");
 	config.Modify("config.system-config.device_id",bj_device_param::Instance().code);
-	config.mDeviceId=bj_device_param::Instance().code;
+	config.mDeviceId=bj_device_param::Instance().code;*/
 
 	char data[256];//请保证自己buffer够用
 	int len = reply.Write(data);

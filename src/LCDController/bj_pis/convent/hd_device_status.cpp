@@ -7,6 +7,7 @@
 #include "Log.h"
 #include "config/configparser.h"
 #include <thread>
+#include "bj_pis/bj_log/log_transfer.h"
 
 //一个cpp里只能写一次，这个会在程序开始时运行。比main函数还早
 STATIC_REGISTRATION(hd_device_status)
@@ -110,7 +111,7 @@ void hd_device_status::SendStatus(st_subscriber &suber)
                 TcpSetString(status, index, "01", 2); //采集点子项数量
                 TcpSetStringGB2312(status, index, "内存总容量", 20); //采集子项点描述
                 TcpSetString(status, index, "1", 1); //采集点状态数据类型
-                TcpSetInt(status, index, (int)(Diagnostic::Instance().GetMemTotal() / 1024), 8); //采集点状态数据值
+                TcpSetInt(status, index, (int)(Diagnostic::Instance().GetMemTotal()), 8); //采集点状态数据值
                 //内存占用百分比
                 TcpSetString(status, index, "008", 3); //采集点类型
                 TcpSetString(status, index, "01", 2); //采集点子项数量
@@ -186,7 +187,8 @@ void hd_device_status::SendLog(st_subscriber &suber)
     int r = ftp.UploadFile(logFile, logFile, d);
     if(r == FTP_TRANS_Result::OK)
     {
-        char log_buff[259];
+    	  LogTransfer::GetInstance().ReOpen();
+        char log_buff[512];
         int index = 0;
         TcpSetString(log_buff, index, logFile, 128);
         TcpSetString(log_buff, index, "100", 3);
@@ -202,7 +204,7 @@ void hd_device_status::SendLog(st_subscriber &suber)
     }
     else
     {
-        LogD("failed\n");
+        LogD("log upload failed\n");
     }
 }
 
@@ -244,7 +246,7 @@ void hd_device_status::OnConnected(bj_msg *msg, ServerTcpConnection *conn)
     SendTCommand("T21", deviceCode, conn);
     SendTCommand("T23", deviceCode, conn);
     SendTCommand("T24", deviceCode, conn);
-    //SendTDeviceStatus(conn);
+    SendTDeviceStatus(conn);
     /*thread _threadT31([conn](){
     	while(conn->State() == waxberry::CONNECTION_STATE::CON_STATE_CONNECTED)
 		{

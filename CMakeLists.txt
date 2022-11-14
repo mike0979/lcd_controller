@@ -5,8 +5,8 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-set(CMAKE_CXX_FLAGS "-Wno-unused-local-typedefs -Wno-unused-function -std=c++11 -rdynamic -D_GLIBCXX_USE_CXX11_ABI=0")
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3")
+set(CMAKE_CXX_FLAGS "-Wno-unused-local-typedefs -Wno-unused-function -std=c++11 -rdynamic -D_GLIBCXX_USE_CXX11_ABI=0 -DRAPIDJSON_HAS_STDSTRING=1")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -fsanitize=address -fno-omit-frame-pointer")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g0 -DNDEBUG")
 
 #打印信息

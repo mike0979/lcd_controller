@@ -88,9 +88,10 @@ void bj_operation_param::SetOperationParam(bj_msg *msg, ServerTcpConnection *con
 
 	/*ConfigParser config("./","config.xml");
 	config.Modify("config.system-config.device_id",bj_operation_param::Instance().ats);*/
-    task_get_ats::GetInstance().ats_url = bj_operation_param::Instance().ats;
+	//guo20221113为了稳定的过协议认证，把这段逻辑去掉，功能不到上线是不影响什么的
+    /*task_get_ats::GetInstance().ats_url = bj_operation_param::Instance().ats;
     task_get_ats::GetInstance().Stop();
-    task_get_ats::GetInstance().Start();
+    task_get_ats::GetInstance().Start();*/
 
 	char data[256];//请保证自己buffer够用
 	int len = reply.Write(data);

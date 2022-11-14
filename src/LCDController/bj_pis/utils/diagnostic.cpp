@@ -22,7 +22,7 @@ const double CARRY_COUNT = 1024.0;
 double Diagnostic::GetCPUUsage()
 {
     std::string cmd =
-        "top -n 2 -d 1 -b | grep Cpu | cut -d \",\" -f 1 | cut -d \":\" -f 2 &";//指令
+        "top -n 2 -d 1 -b | grep Cpu | cut -d \",\" -f 1 | cut -d \":\" -f 2 ";//指令
     std::string strused = "0.0";
     FILE *freport = popen(cmd.c_str(), "r");//file 的类型是 string ，popen 第一个参数要求是const char *， 如果想传 string 给 popen
     //需要使用成员函数c_str() 将string 转化成const char *
@@ -35,7 +35,7 @@ double Diagnostic::GetCPUUsage()
 
     char linebuf[1024];
 
-    usleep(1000 * 1000 * 2);//usleep函数能把线程挂起一段时间， 单位是千分之一毫秒。本函数可暂时使程序停止执行。参数 micro_seconds 为要暂停的微秒数(us)。
+    //usleep(1000 * 1000 * 2);//usleep函数能把线程挂起一段时间， 单位是千分之一毫秒。本函数可暂时使程序停止执行。参数 micro_seconds 为要暂停的微秒数(us)。
     int index = 0;
 
     while (fgets(linebuf, 1023, freport) != NULL)//从指定流中读取数据
@@ -75,7 +75,7 @@ double Diagnostic::GetCPUUsage()
 
 long Diagnostic::GetMemTotal()
 {
-    std::string cmd = "top -n 1 -d 1 -b |grep \"KiB Mem\" | cut -d \":\" -f 2 &";
+    std::string cmd = "top -n 1 -d 1 -b |grep \"KiB Mem\" | cut -d \":\" -f 2 ";
     long totalmem = 0;
     FILE *freport = popen(cmd.c_str(), "r");
     if (freport == NULL)
@@ -85,7 +85,7 @@ long Diagnostic::GetMemTotal()
     }
 
     char linebuf[1024];
-    usleep(1000 * 1000 * 1);
+    //usleep(1000 * 1000 * 1);
     while (fgets(linebuf, 1023, freport) != NULL)
     {
         char* token = strtok(linebuf, ", ");
@@ -295,7 +295,6 @@ void Diagnostic::GetSoftwareMC(double& mem_usage, double& cpu_usage)
 
 string Diagnostic::GetServerVersion()
 {
-	int rv = -1;
 	char result_buf[1024];
 
 	FILE *fp = popen("cat /etc/redhat-release", "r"); //popen
@@ -307,7 +306,7 @@ string Diagnostic::GetServerVersion()
 	}
 	printf("popen ServerVersion successfully!\n");//判断是否打开成功
 
-	if ((rv = fread(result_buf, 1, sizeof(result_buf), fp)) < 0)
+	if (fgets(result_buf, (int)sizeof(result_buf), fp)==NULL)
 	{
 		printf("Read from fp failure:%s\n", strerror(errno));
 		return "unknown";
@@ -322,7 +321,6 @@ string Diagnostic::GetServerVersion()
 
 string Diagnostic::GetCpuVersion()
 {
-	int rc = -1;
 	char result_buf[1024];
 
 	FILE *fp = popen("cat /proc/cpuinfo|grep 'model name'", "r"); //popen
@@ -334,7 +332,7 @@ string Diagnostic::GetCpuVersion()
 	}
 	printf("popen CpuVersion successfully!\n");//判断是否打开成功
 
-	if ((rc = fread(result_buf, 1, sizeof(result_buf), fp)) < 0)
+	if (fgets(result_buf, (int)sizeof(result_buf), fp)==NULL)
 	{
 		printf("Read from fp failure:%s\n", strerror(errno));
 		return "unknown";

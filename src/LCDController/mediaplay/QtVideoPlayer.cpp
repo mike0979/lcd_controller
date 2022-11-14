@@ -94,7 +94,7 @@ void QtVideoPlayer::play(const std::string &file,bool islive,const std::string &
 	mPlayer->setRepeat(0);
 	mPlayer->masterClock()->setClockType(AVClock::AudioClock);
 
-	mPlayer->setAudioSyncParam(clientip.c_str(),islive);
+	//mPlayer->setAudioSyncParam(clientip.c_str(),islive);
 	mPlayer->play(file.c_str());
 }
 

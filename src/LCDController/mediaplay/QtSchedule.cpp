@@ -303,32 +303,29 @@ void QtSchedule::onQtMediaDone(QtMediaDone *done)
 
 bool QtSchedule::setPlayLayoutInfo(void* data)
 {
-	synchronized(mQtTimerDoneMapperMutex)
-	{
-		Json::LayoutInfo4Qt* fullLayoutInfo = (Json::LayoutInfo4Qt*)data;
+	Json::LayoutInfo4Qt* fullLayoutInfo = (Json::LayoutInfo4Qt*)data;
 
-		releaseMediadone();
-		releaseUsedWidgets();
-		releaseLayoutBGPool();
-		//object created in transmanager module
-		DELETE_ALLOCEDRESOURCE(mLayoutInfoForPlay);
-		if (fullLayoutInfo != NULL)
+	releaseMediadone();
+	releaseUsedWidgets();
+	releaseLayoutBGPool();
+	//object created in transmanager module
+	DELETE_ALLOCEDRESOURCE(mLayoutInfoForPlay);
+	if (fullLayoutInfo != NULL)
+	{
+		mLayoutInfoForPlay = fullLayoutInfo;
+		if (language_switch_timer_.isActive())
 		{
-			mLayoutInfoForPlay = fullLayoutInfo;
-			if (language_switch_timer_.isActive())
-			{
-				language_switch_timer_.stop();
-			}
-			language_switch_timer_.setInterval(mLayoutInfoForPlay->layoutDtl.ch_en_switch_ * 1000);
-			language_switch_timer_.start();
-			emit signalStartPlaynewLayout();
+			language_switch_timer_.stop();
 		}
-		else
-		{
-			LogD("############################################### fullLayoutInfo == NULL\n");
-			mLayoutInfoForPlay = nullptr;
-			deleteAllWidgets();
-		}
+		language_switch_timer_.setInterval(mLayoutInfoForPlay->layoutDtl.ch_en_switch_ * 1000);
+		language_switch_timer_.start();
+		emit signalStartPlaynewLayout();
+	}
+	else
+	{
+		LogD("############################################### fullLayoutInfo == NULL\n");
+		mLayoutInfoForPlay = nullptr;
+		deleteAllWidgets();
 	}
 	
 	return true;
@@ -573,8 +570,7 @@ string QtSchedule::getBackImage()
 
 void QtSchedule::slotStartPlaynewLayout()
 {
-	synchronized(mQtTimerDoneMapperMutex)
-	{
+
 		LogD("--------------  start to play layout.\n");
 
 		releaseLayoutBGPool();
@@ -624,30 +620,28 @@ void QtSchedule::slotStartPlaynewLayout()
 			}
 
 		}
-	}
 }
 
 void QtSchedule::slotPlayNextContent(Json::PartitionDetail *pPartation, Json::MediaBasic* pContent)
 {
-	synchronized(mQtTimerDoneMapperMutex)
-	{
-		//LogD("--------- Partation-%d to play next content.\n",pPartation->mId);
-		Json::LayoutInfo4Qt::MediaContents& mediaContents = mLayoutInfoForPlay->mPartitonInfos[pPartation->mId];
-		Json::MediaBasic* mediaContent = NULL;
-		if (!findMediaBaise(mediaContents, mediaContent, pContent))
-		{
-			LogE("slotPlayNextContent - get next content failed!\n");
-			return;
-		}
+	//LogD("--------- Partation-%d to play next content.\n",pPartation->mId);
 
-		if (pPartation != NULL && mediaContent != NULL)
-		{
-			play(pPartation, mediaContent);
-		}
-		else
-		{
-			LogE("pPartation == NULL || mediaContent == NULL\n");
-		}
+	Json::LayoutInfo4Qt::MediaContents& mediaContents = mLayoutInfoForPlay->mPartitonInfos[pPartation->mId];
+
+	Json::MediaBasic* mediaContent = NULL;
+	if(!findMediaBaise(mediaContents,mediaContent,pContent))
+	{
+		LogE("slotPlayNextContent - get next content failed!\n");
+		return ;
+	}
+
+	if (pPartation != NULL && mediaContent != NULL)
+	{
+		play(pPartation, mediaContent);
+	}
+	else
+	{
+		LogE("pPartation == NULL || mediaContent == NULL\n");
 	}
 }
 
@@ -1280,8 +1274,7 @@ void QtSchedule::releaseQtImage(QtImage *image)
 	mQtImageInUse.remove(image);
 
 	if (mQtImagePool.size() >= MAX_IMAGE_POOL_SIZE) {
-		delete image;
-		image = NULL;
+		DELETE_ALLOCEDRESOURCE(image);
 	}
 	else {
 		mQtImagePool.push_back(image);
@@ -1581,7 +1574,7 @@ void QtSchedule::deleteAllWidgets()
 
 void QtSchedule::releaseMediadone()
 {
-	//synchronized(mQtTimerDoneMapperMutex)
+	synchronized(mQtTimerDoneMapperMutex)
 	{
 		std::map<QtTimer *, QtMediaDone *>::iterator itor = mQtTimerDoneMapper.end() ;
 		for(itor = mQtTimerDoneMapper.begin() ;itor!=mQtTimerDoneMapper.end();++itor)

@@ -241,7 +241,7 @@ void QtStage::onOPMsgPlay(bool bstart, OPSMsgParam* currOps, int display_region)
 			bool ret = mQtSchedule->setOPSPartation(false,x,y,w,h, currOps);
     	}
     	// temporary modify
-    	if (display_region < 0)
+    	if (display_region < fullscreenshow || display_region >= unknownregion)
     	{
     		return;
     	}

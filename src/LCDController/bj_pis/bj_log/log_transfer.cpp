@@ -9,13 +9,22 @@ LogTransfer::LogTransfer()
 {
 	string path="/home/log/lcd_player/lcd_";
 	path+=datetime::Now().ToString("%Y%m%d")+".log";
-	fp_ = fopen(path.c_str(), "a");
+	fp_ = fopen(path.c_str(), "w");
 }
 
 LogTransfer::~LogTransfer()
 {
 	fclose(fp_);
 }
+
+void LogTransfer::ReOpen()
+{
+	fclose(fp_);
+	string path="/home/log/lcd_player/lcd_";
+	path+=datetime::Now().ToString("%Y%m%d")+".log";
+	fp_ = fopen(path.c_str(), "w");
+}
+
 LogTransfer& LogTransfer::GetInstance()
 {
 	static LogTransfer log_tranfer_;

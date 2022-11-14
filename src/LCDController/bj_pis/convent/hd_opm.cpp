@@ -157,7 +157,7 @@ void HdOpm::CancelOpm(bj_msg* msg, ServerTcpConnection* conn)
 
 void HdOpm::WriteToFile()
 {
-	fp_ = fopen("/home/workspace/opm.txt", "w");
+	fp_ = fopen("/home/workspace/bj_media/opm.txt", "w");
 	for (auto it = msgs_.begin(); it != msgs_.end(); it++)
 	{
 		fputs((it->second.Variable2String(it->first) + '@').c_str(), fp_);
@@ -167,12 +167,12 @@ void HdOpm::WriteToFile()
 
 void HdOpm::ReadFromFile()
 {
-	fp_ = fopen("/home/workspace/opm.txt", "r");
+	fp_ = fopen("/home/workspace/bj_media/opm.txt", "r");
 	if (nullptr == fp_)
 	{
 		return;
 	}
-	auto file_size = boost::filesystem::file_size("/home/workspace/opm.txt");
+	auto file_size = boost::filesystem::file_size("/home/workspace/bj_media/opm.txt");
 	if (0 == file_size)
 	{
 		return;

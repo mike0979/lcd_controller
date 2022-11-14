@@ -45,7 +45,7 @@ static void SendDownloadReport(const string& taskId, int status, ServerTcpConnec
     tmsg.SystemCode = "10";
     tmsg.TimeStamp = datetime::Now().get_time();
     tmsg.Command = "T35";
-    tmsg.SetData("", 19);
+    tmsg.SetData("", 18);
     int index = 0;
     TcpSetString(tmsg.Data, index, taskId, 14);
     TcpSetInt(tmsg.Data, index, status, 1);

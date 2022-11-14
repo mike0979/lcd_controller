@@ -142,8 +142,9 @@ void bj_msg::SetData(const char* data,int len)
 		delete [] Data;
 	}
 	DataLength = len;
-	Data=new char[len];
-	memcpy(Data, data, strlen(data));
+	Data=new char[len]{'\0'};
+	int l=std::min(len,(int)strlen(data));
+	memcpy(Data, data, l);
 }
 
 int bj_msg::GetSendSQN()

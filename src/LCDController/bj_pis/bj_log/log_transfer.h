@@ -9,6 +9,7 @@ class LogTransfer
 public:
 	LogTransfer();
 	~LogTransfer();
+	void ReOpen();
 	static LogTransfer& GetInstance();
 	void LogReceive(const char* src_content, int size) const;
 	void LogSend(const char* src_content, int size) const;

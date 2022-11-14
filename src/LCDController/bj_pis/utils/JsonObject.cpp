@@ -380,7 +380,7 @@ static void JsonObject_SetRapidjson(rapidjson::Value &v, const JsonObject &j, ra
         {
             rapidjson::Value mv;
             JsonObject_SetRapidjson(mv, json, allocator);
-            v.AddMember(rapidjson::StringRef(json.GetName().c_str()), mv, allocator);
+            v.AddMember(rapidjson::StringRef(json.GetName()), mv, allocator);
         }
         break;
     }
@@ -397,7 +397,7 @@ static void JsonObject_SetRapidjson(rapidjson::Value &v, const JsonObject &j, ra
         break;
     }
     case 5://string
-        v.SetString(rapidjson::StringRef((*static_cast<string*>(FRD_GetValue(j))).c_str()));
+        v.SetString(rapidjson::StringRef(*static_cast<string *>(FRD_GetValue(j))));
         break;
     case 6://float
         v.SetFloat((float)(*static_cast<double *>(FRD_GetValue(j))));

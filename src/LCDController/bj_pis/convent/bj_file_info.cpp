@@ -67,10 +67,12 @@ void bj_file_info::Download(const string& dst, function<void(bj_file_info *)> ca
     	  callback(_this);
         	return;
         }
-    	while(!_this->HasDownloaded&&_this->FailCount<3)//如果下载失败，最多重试3次
+    	/*while(!_this->HasDownloaded&&_this->FailCount<3)//如果下载失败，最多重试3次
     	{
     		_this->DownloadInner();
-    	}
+    	}*/
+      if(!_this->HasDownloaded)
+    	  _this->DownloadInner();
     	callback(_this);
     },*this);
     t.detach();

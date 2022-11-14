@@ -496,22 +496,22 @@ void QtMarquee::paintEvent(QPaintEvent * evt)
 	QPainter painter1(this);
 	int ipos = mPaintPos;
 
-	if(mLinesInfo.size() == 1)
-	{
-		painter1.drawPixmap(10, this->height()/2 - mTextHeight/2, *mCache[0]);
-	}
-	else if(mLinesInfo.size() == 2)
-	{
-		painter1.drawPixmap(10, this->height()/2 - mTextHeight, *mCache[0]);
-		painter1.drawPixmap(10, this->height()/2 , *mCache[1]);
-	}
-	else if(mLinesInfo.size() == 3)
-	{
-		painter1.drawPixmap(10, this->height()/2 - mTextHeight*1.5, *mCache[0]);
-		painter1.drawPixmap(10, this->height()/2 - mTextHeight*0.5, *mCache[1]);
-		painter1.drawPixmap(10, this->height()/2 + mTextHeight*0.5 , *mCache[2]);
-	}
-	else
+	//if(mLinesInfo.size() == 1)
+	//{
+	//	painter1.drawPixmap(10, this->height()/2 - mTextHeight/2, *mCache[0]);
+	//}
+	//else if(mLinesInfo.size() == 2)
+	//{
+	//	painter1.drawPixmap(10, this->height()/2 - mTextHeight, *mCache[0]);
+	//	painter1.drawPixmap(10, this->height()/2 , *mCache[1]);
+	//}
+	//else if(mLinesInfo.size() == 3)
+	//{
+	//	painter1.drawPixmap(10, this->height()/2 - mTextHeight*1.5, *mCache[0]);
+	//	painter1.drawPixmap(10, this->height()/2 - mTextHeight*0.5, *mCache[1]);
+	//	painter1.drawPixmap(10, this->height()/2 + mTextHeight*0.5 , *mCache[2]);
+	//}
+	//else
 	{
 
 		for (unsigned i = 0; i < mLinesInfo.size(); i++) {
@@ -555,10 +555,10 @@ void QtMarquee::paintEvent(QPaintEvent * evt)
 		}
 	}
 
-	if(mLinesInfo.size() <=3)
-	{
-		mTimer->stop();
-	}
+	//if(mLinesInfo.size() <=3)
+	//{
+	//	mTimer->stop();
+	//}
 
 	//painter.setCompositionMode(QPainter::CompositionMode_Destination);
 	//painter.end();

@@ -735,12 +735,16 @@ void QtOPMessage::cleanOPSPlayList(std::list<int>& cleanidlist)
 
 			cleanidlist.push_back((*iter)->mID);
 			opsmsg = *iter;
-			iter = mCurrOPSMsgList.erase(iter);
-			if(opsmsg!= NULL)
+			if (opsmsg != NULL)
 			{
+				if (opsmsg == mCurrOPSMsg)
+				{
+					mCurrOPSMsg = NULL;
+				}
 				delete opsmsg;
 				opsmsg = NULL;
 			}
+			iter = mCurrOPSMsgList.erase(iter);
 		}
 		else
 		{
@@ -946,55 +950,55 @@ void QtOPMessage::paintEvent(QPaintEvent * evt)
 	painter.setClipRect(0, 0, width, height, Qt::ReplaceClip);
 
 
-	if(mCurrOPSRegion == OPSDisplayRegion::fullscreenshow && mLinesInfo.size() <= 6)
-	{
-		int ipos = height/2 - (mTextHeight*1.2)*mLinesInfo.size()*0.5;
+	//if(mCurrOPSRegion == OPSDisplayRegion::fullscreenshow && mLinesInfo.size() <= 6)
+	//{
+	//	int ipos = height/2 - (mTextHeight*1.2)*mLinesInfo.size()*0.5;
 
-		for (unsigned i = 0; i < mLinesInfo.size(); i++) {
+	//	for (unsigned i = 0; i < mLinesInfo.size(); i++) {
 
-			int ix = 20;
-			int iy = ipos;
+	//		int ix = 20;
+	//		int iy = ipos;
 
-			painter.drawPixmap(ix, iy, *mCache[i]);
+	//		painter.drawPixmap(ix, iy, *mCache[i]);
 
-			ipos += mTextHeight*1.2;
-		}
-		return ;
-	}
-	else if(mCurrOPSRegion == OPSDisplayRegion::masterpartation && mLinesInfo.size() <= 5)
-	{
-		int ipos = height/2 - (mTextHeight*1.2)*mLinesInfo.size()*0.5;
+	//		ipos += mTextHeight*1.2;
+	//	}
+	//	return ;
+	//}
+	//else if(mCurrOPSRegion == OPSDisplayRegion::masterpartation && mLinesInfo.size() <= 5)
+	//{
+	//	int ipos = height/2 - (mTextHeight*1.2)*mLinesInfo.size()*0.5;
 
-		for (unsigned i = 0; i < mLinesInfo.size(); i++) {
+	//	for (unsigned i = 0; i < mLinesInfo.size(); i++) {
 
-			int ix = 20;
-			int iy = ipos;
+	//		int ix = 20;
+	//		int iy = ipos;
 
-			painter.drawPixmap(ix, iy, *mCache[i]);
+	//		painter.drawPixmap(ix, iy, *mCache[i]);
 
-			ipos += mTextHeight*1.2;
-		}
-		return ;
-	}
-	else if(mCurrOPSRegion == OPSDisplayRegion::partationshow && mLinesInfo.size() <= 3)
-	{
-		int ipos = height/2 - mTextHeight*mLinesInfo.size()*0.5;
+	//		ipos += mTextHeight*1.2;
+	//	}
+	//	return ;
+	//}
+	//else if(mCurrOPSRegion == OPSDisplayRegion::partationshow && mLinesInfo.size() <= 3)
+	//{
+	//	int ipos = height/2 - mTextHeight*mLinesInfo.size()*0.5;
 
-		for (unsigned i = 0; i < mLinesInfo.size(); i++) {
+	//	for (unsigned i = 0; i < mLinesInfo.size(); i++) {
 
-			int ix = 20;
-			int iy = ipos;
+	//		int ix = 20;
+	//		int iy = ipos;
 
-			painter.drawPixmap(ix, iy, *mCache[i]);
+	//		painter.drawPixmap(ix, iy, *mCache[i]);
 
-			ipos += mTextHeight;
-		}
-		return ;
-	}
+	//		ipos += mTextHeight;
+	//	}
+	//	return ;
+	//}
 
 	int ipos = mPaintPos;
 	for (unsigned i = 0; i < mLinesInfo.size(); i++) {
-		if (true || ipos + mLinesInfo[i].mPixWidth > 0 && ipos <= width && mCache[i]!=NULL) {
+		if (ipos + mLinesInfo[i].mPixWidth > 0 && ipos <= width && mCache[i]!=NULL) {
 			int ix = 0;
 			int iy = 0;
 			int ix2=0x7fffffff,iy2=0x7fffffff;
@@ -1059,7 +1063,11 @@ void QtOPMessage::paintEvent(QPaintEvent * evt)
 
 void QtOPMessage::invalidate()
 {
-	if (mRunning && mCurrOPSMsg!= NULL) {
+	if (mCurrOPSMsg == NULL)
+	{
+		return;
+	}
+	if (mRunning) {
 
 		if (0 == mTimeTrack)
 		{

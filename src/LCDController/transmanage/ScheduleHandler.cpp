@@ -1339,11 +1339,11 @@ Json::ScheduleDetail* ScheduleHandler::FindSchedule(
             ++iter)
     {
     	std::string currHMS = timePoint.substr(9,6);
-    	std::string startHMS = iter->second->mScheduleBasic.mStartTime.substr(9,6);
-    	std::string endHMS = iter->second->mScheduleBasic.mEndTime.substr(9,6);
+    	std::string startHMS = iter->second->mScheduleBasic.mStartTime.substr(9,6);//逻辑错误，开始时间不应该用这个代表，理论上来说，北京的“schedule”没有时间段，layout才有
+    	std::string endHMS = iter->second->mScheduleBasic.mEndTime.substr(9,6);//逻辑错误
         if ((iter->second != NULL
-        		&& currHMS >= startHMS
-				&& currHMS < endHMS
+        		/*&& currHMS >= startHMS		//逻辑错误
+				&& currHMS < endHMS*/			//逻辑错误
 				&&timePoint >= iter->second->mScheduleBasic.mStartTime
             && timePoint < iter->second->mScheduleBasic.mEndTime)||iter->second->mScheduleBasic.mPriority==999)
         {

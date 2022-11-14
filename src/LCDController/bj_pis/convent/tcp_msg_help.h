@@ -12,6 +12,7 @@
 #include <iconv.h>
 #include <errno.h>
 #include <iostream>
+#include <boost/filesystem.hpp>
 
 static std::string TcpGetString(const char* data,int& index,int len)
 {
@@ -212,28 +213,22 @@ static void GetFiles(string dir_path,std::vector<std::string>& result,bool recur
 
 static string GetLatestFile(string dir_path)
 {
-	struct dirent *ptr;    
-    DIR *dir;
-    if(dir_path.back()=='/')dir_path.pop_back();
-    dir=opendir(dir_path.c_str());
-    if(!dir) return "";
     string result;
-    struct stat sb;
     time_t t = 0;
-    while((ptr=readdir(dir))!=NULL)
+    boost::filesystem::directory_iterator it(dir_path);
+    while(it != boost::filesystem::directory_iterator())
     {
-        if(ptr->d_name[0] == '.')
-            continue;
-        stat(ptr->d_name, &sb);
-        if(!S_ISDIR(sb.st_mode))//file
+        if (!boost::filesystem::is_directory(it->path()))
         {
-        	if(sb.st_mtime > t)
-        	{
-        		result = ptr->d_name;
-        	}
+            time_t lt = boost::filesystem::last_write_time(it->path());
+            if (lt > t)
+            {
+                t = lt;
+                result = it->path().filename().string();
+            }
         }
+        ++it;
     }
-    closedir(dir);
     return result;
 }
 
