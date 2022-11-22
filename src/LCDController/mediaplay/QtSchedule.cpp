@@ -72,7 +72,7 @@ QtSchedule::QtSchedule(LCDController* lcdcontroller,QWidget *parent) : QWidget(p
 	mLiveBufferedCount = 0;
 	mLastMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
 
-	mLayoutInfoForPlay = NULL;
+	//mLayoutInfoForPlay = NULL;
 
 	mLiveSourceConfig = LIVE_AutoPlay;
 
@@ -92,7 +92,7 @@ QtSchedule::~QtSchedule()
 	releaseMediadone();
 
 	deleteAllWidgets();
-	DELETE_ALLOCEDRESOURCE(mLayoutInfoForPlay);
+	//DELETE_ALLOCEDRESOURCE(mLayoutInfoForPlay);
 
 	DELETE_ALLOCEDRESOURCE(mStreamDector);
 
@@ -309,22 +309,22 @@ bool QtSchedule::setPlayLayoutInfo(void* data)
 	releaseUsedWidgets();
 	releaseLayoutBGPool();
 	//object created in transmanager module
-	DELETE_ALLOCEDRESOURCE(mLayoutInfoForPlay);
 	if (fullLayoutInfo != NULL)
 	{
-		mLayoutInfoForPlay = fullLayoutInfo;
+		mLayoutInfoForPlay = std::move(*fullLayoutInfo);
+		DELETE_ALLOCEDRESOURCE(fullLayoutInfo);
 		if (language_switch_timer_.isActive())
 		{
 			language_switch_timer_.stop();
 		}
-		language_switch_timer_.setInterval(mLayoutInfoForPlay->layoutDtl.ch_en_switch_ * 1000);
+		language_switch_timer_.setInterval(mLayoutInfoForPlay.layoutDtl.ch_en_switch_ * 1000);
 		language_switch_timer_.start();
 		emit signalStartPlaynewLayout();
 	}
 	else
 	{
 		LogD("############################################### fullLayoutInfo == NULL\n");
-		mLayoutInfoForPlay = nullptr;
+		//mLayoutInfoForPlay = nullptr;
 		deleteAllWidgets();
 	}
 	
@@ -450,10 +450,10 @@ void QtSchedule::setStreamStatus(bool status)
 
 void QtSchedule::setOPSFullScreen(OPSMsgParam* currOps)
 {
-	currOps->mFont = QFont(mLayoutInfoForPlay->layoutDtl.emer_.fullScreen.emer_font.name.c_str(), mLayoutInfoForPlay->layoutDtl.emer_.halfScreen.emer_font.size * 0.65);
-	currOps->mFont.setItalic(mLayoutInfoForPlay->layoutDtl.emer_.fullScreen.emer_font.italic);
-	currOps->mFont.setBold(mLayoutInfoForPlay->layoutDtl.emer_.fullScreen.emer_font.bold);
-	currOps->mSpeed = mLayoutInfoForPlay->layoutDtl.emer_.fullScreen.speed;
+	currOps->mFont = QFont(mLayoutInfoForPlay.layoutDtl.emer_.fullScreen.emer_font.name.c_str(), mLayoutInfoForPlay.layoutDtl.emer_.halfScreen.emer_font.size * 0.65);
+	currOps->mFont.setItalic(mLayoutInfoForPlay.layoutDtl.emer_.fullScreen.emer_font.italic);
+	currOps->mFont.setBold(mLayoutInfoForPlay.layoutDtl.emer_.fullScreen.emer_font.bold);
+	currOps->mSpeed = mLayoutInfoForPlay.layoutDtl.emer_.fullScreen.speed;
 }
 
 bool QtSchedule::setOPSHalfScreen(bool status,int& x ,int& y ,int& w ,int& h, OPSMsgParam* currOps)
@@ -462,18 +462,18 @@ bool QtSchedule::setOPSHalfScreen(bool status,int& x ,int& y ,int& w ,int& h, OP
 	std::map<QtTimer *, QtMediaDone *>::iterator itor = mQtTimerDoneMapper.end() ;
 	synchronized(mQtTimerDoneMapperMutex)
 	{
-		if (mLayoutInfoForPlay != NULL)
+		//if (mLayoutInfoForPlay != NULL)
 		{
 			if (currOps != nullptr)
 			{
-				currOps->mFont = QFont(mLayoutInfoForPlay->layoutDtl.emer_.halfScreen.emer_font.name.c_str(), mLayoutInfoForPlay->layoutDtl.emer_.halfScreen.emer_font.size * 0.65);
-				currOps->mFont.setItalic(mLayoutInfoForPlay->layoutDtl.emer_.halfScreen.emer_font.italic);
-				currOps->mFont.setBold(mLayoutInfoForPlay->layoutDtl.emer_.halfScreen.emer_font.bold);
-				currOps->mSpeed = mLayoutInfoForPlay->layoutDtl.emer_.halfScreen.speed;
+				currOps->mFont = QFont(mLayoutInfoForPlay.layoutDtl.emer_.halfScreen.emer_font.name.c_str(), mLayoutInfoForPlay.layoutDtl.emer_.halfScreen.emer_font.size * 0.65);
+				currOps->mFont.setItalic(mLayoutInfoForPlay.layoutDtl.emer_.halfScreen.emer_font.italic);
+				currOps->mFont.setBold(mLayoutInfoForPlay.layoutDtl.emer_.halfScreen.emer_font.bold);
+				currOps->mSpeed = mLayoutInfoForPlay.layoutDtl.emer_.halfScreen.speed;
 			}
 
-			for (std::vector<Json::PartitionDetail>::iterator iter = mLayoutInfoForPlay->layoutDtl.mPartitions.begin();
-				iter != mLayoutInfoForPlay->layoutDtl.mPartitions.end(); ++iter)
+			for (std::vector<Json::PartitionDetail>::iterator iter = mLayoutInfoForPlay.layoutDtl.mPartitions.begin();
+				iter != mLayoutInfoForPlay.layoutDtl.mPartitions.end(); ++iter)
 			{
 				//LogD("-----------------------------  parid:%d,  opsfalg\n",iter->mId)
 				if (iter->mIsMaster && status)
@@ -495,7 +495,7 @@ bool QtSchedule::setOPSHalfScreen(bool status,int& x ,int& y ,int& w ,int& h, OP
 
 bool QtSchedule::setOPSPartation(bool status,int& x,int& y,int& w,int& h, OPSMsgParam* currOps)
 {
-	auto it = mLayoutInfoForPlay->mPartitonInfos.find(301);
+	auto it = mLayoutInfoForPlay.mPartitonInfos.find(301);
 	Json::MediaText* media_text = dynamic_cast<Json::MediaText*>(it->second.begin()->second);
 	if (nullptr != media_text && nullptr != currOps)
 	{
@@ -509,9 +509,9 @@ bool QtSchedule::setOPSPartation(bool status,int& x,int& y,int& w,int& h, OPSMsg
 	std::map<QtTimer *, QtMediaDone *>::iterator itor = mQtTimerDoneMapper.end() ;
 	synchronized(mQtTimerDoneMapperMutex)
 	{
-		if(mLayoutInfoForPlay != NULL)
-		for(std::vector<Json::PartitionDetail>::iterator iter = mLayoutInfoForPlay->layoutDtl.mPartitions.begin();
-				iter != mLayoutInfoForPlay->layoutDtl.mPartitions.end();++iter)
+		//if(mLayoutInfoForPlay != NULL)
+		for(std::vector<Json::PartitionDetail>::iterator iter = mLayoutInfoForPlay.layoutDtl.mPartitions.begin();
+				iter != mLayoutInfoForPlay.layoutDtl.mPartitions.end();++iter)
 		{
 			//LogD("-----------------------------  parid:%d,  opsfalg\n",iter->mId)
 			if(iter->mOPSflag && status)
@@ -565,7 +565,7 @@ bool QtSchedule::setOPSPartation(bool status,int& x,int& y,int& w,int& h, OPSMsg
 
 string QtSchedule::getBackImage()
 {
-	return mLayoutInfoForPlay->layoutDtl.back_image_;
+	return mLayoutInfoForPlay.layoutDtl.back_image_;
 }
 
 void QtSchedule::slotStartPlaynewLayout()
@@ -574,15 +574,15 @@ void QtSchedule::slotStartPlaynewLayout()
 		LogD("--------------  start to play layout.\n");
 
 		releaseLayoutBGPool();
-		mLayoutInfoForPlay->layoutDtl.sortPartationByZOrder();
-		for (std::vector<Json::PartitionDetail>::iterator iter = mLayoutInfoForPlay->layoutDtl.mPartitions.begin();
-			iter != mLayoutInfoForPlay->layoutDtl.mPartitions.end(); ++iter)
+		mLayoutInfoForPlay.layoutDtl.sortPartationByZOrder();
+		for (std::vector<Json::PartitionDetail>::iterator iter = mLayoutInfoForPlay.layoutDtl.mPartitions.begin();
+			iter != mLayoutInfoForPlay.layoutDtl.mPartitions.end(); ++iter)
 		{
 			LogD("slotStartPlaynewLayout - partationid:%d\n", iter->mId);
 			Json::PartitionDetail* partation = &(*iter);
 
 			Json::MediaBasic* mediaContent = NULL;
-			if (!findMediaBaise(mLayoutInfoForPlay->mPartitonInfos[iter->mId], mediaContent, NULL))
+			if (!findMediaBaise(mLayoutInfoForPlay.mPartitonInfos[iter->mId], mediaContent, NULL))
 			{
 				LogE("slotStartPlaynewLayout - get media failed!\n");
 				mediaContent = NULL;
@@ -626,7 +626,7 @@ void QtSchedule::slotPlayNextContent(Json::PartitionDetail *pPartation, Json::Me
 {
 	//LogD("--------- Partation-%d to play next content.\n",pPartation->mId);
 
-	Json::LayoutInfo4Qt::MediaContents& mediaContents = mLayoutInfoForPlay->mPartitonInfos[pPartation->mId];
+	Json::LayoutInfo4Qt::MediaContents& mediaContents = mLayoutInfoForPlay.mPartitonInfos[pPartation->mId];
 
 	Json::MediaBasic* mediaContent = NULL;
 	if(!findMediaBaise(mediaContents,mediaContent,pContent))

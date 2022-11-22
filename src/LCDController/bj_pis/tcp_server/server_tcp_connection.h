@@ -4,6 +4,7 @@
 #include <net/message.h>
 #include <net/tcp_connection.h>
 #include <vector>
+#include <map>
 
 class ServerTcpConnection :public waxberry::WaxberryTcpConnection<waxberry::Message>
 {
@@ -18,6 +19,8 @@ public:
 
     static vector<ServerTcpConnection*> TransferConns;
     static const char* TAG;
+private:
+    static std::map<ServerTcpConnection*,bool> States;
 };
 
 #endif

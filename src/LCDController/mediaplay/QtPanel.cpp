@@ -51,7 +51,7 @@ void QtPanel::run()
 
     mStage = new QtStage(mLCDController);
     LogD("Set window full screen and no frame\n");
-    mStage->setWindowFlags(Qt::FramelessWindowHint /*| Qt::WindowStaysOnTopHint*/);
+    mStage->setWindowFlags(Qt::FramelessWindowHint/* | Qt::WindowStaysOnTopHint*/);
     mStage->showFullScreen();
     mStage->show();
 

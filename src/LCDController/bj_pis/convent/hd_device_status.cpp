@@ -52,7 +52,7 @@ void hd_device_status::OnSubscribeStatus(bj_msg *msg, ServerTcpConnection *conn)
     suber.last=time(0)-suber.duration-1;
     suber.conn=conn;
 
-    //清除状态订阅
+    /*//清除状态订阅
 	for (std::vector<st_subscriber>::iterator iter = StatusSubers.begin(); iter != StatusSubers.end(); ++iter)
 	{
 		if(conn->RemoteEndpoint() == iter->remote)
@@ -61,7 +61,8 @@ void hd_device_status::OnSubscribeStatus(bj_msg *msg, ServerTcpConnection *conn)
 			break;
 		}
 	}
-    StatusSubers.push_back(suber);
+    StatusSubers.push_back(suber);*/
+    SendStatus(suber);
 }
 
 void hd_device_status::SendStatus(st_subscriber &suber)
@@ -111,7 +112,7 @@ void hd_device_status::SendStatus(st_subscriber &suber)
                 TcpSetString(status, index, "01", 2); //采集点子项数量
                 TcpSetStringGB2312(status, index, "内存总容量", 20); //采集子项点描述
                 TcpSetString(status, index, "1", 1); //采集点状态数据类型
-                TcpSetInt(status, index, (int)(Diagnostic::Instance().GetMemTotal()), 8); //采集点状态数据值
+                TcpSetInt(status, index, (int)(Diagnostic::Instance().GetMemTotal()/10), 8); //采集点状态数据值
                 //内存占用百分比
                 TcpSetString(status, index, "008", 3); //采集点类型
                 TcpSetString(status, index, "01", 2); //采集点子项数量
@@ -148,7 +149,7 @@ void hd_device_status::OnSubscribeLog(bj_msg *msg, ServerTcpConnection *conn)
     suber.reply.SystemCode = "10"; //SPIS
     suber.last=time(0)-suber.duration-1;
     suber.conn=conn;
-	//清除日志订阅
+	/*//清除日志订阅
 	for (std::vector<st_subscriber>::iterator iter = LogSubers.begin(); iter != LogSubers.end(); ++iter)
 	{
 		if(conn->RemoteEndpoint() == iter->remote)
@@ -157,7 +158,8 @@ void hd_device_status::OnSubscribeLog(bj_msg *msg, ServerTcpConnection *conn)
 			break;
 		}
 	}
-    LogSubers.push_back(suber);
+    LogSubers.push_back(suber);*/
+    SendLog(suber);
 }
 
 void hd_device_status::SendLog(st_subscriber &suber)

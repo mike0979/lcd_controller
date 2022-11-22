@@ -153,7 +153,7 @@ private:
     std::map<QtTimer *, QtMediaDone *> mQtTimerDoneMapper;
 
     //Json::SwitchLayoutBasic mSwitchLayoutBasic;
-    Json::LayoutInfo4Qt* mLayoutInfoForPlay;
+    Json::LayoutInfo4Qt mLayoutInfoForPlay;
 
     bool mBUsedWidgetsFreeze;
 

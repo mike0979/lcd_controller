@@ -66,17 +66,17 @@ void LogTransfer::LogReceive(const char* src_content, int size) const
 
 void LogTransfer::LogSend(const char* src_content, int size) const
 {
-	char content[size+1];
+	/*char content[size+1];
 	content[size]='\0';
 	memcpy(content,src_content,(unsigned long int)size);
 	RemoveCRLF(content,size);
 	LOGHEAD("Info   ","SED");
-	LOGRAWCONTENT(content,size);
+	LOGRAWCONTENT(content,size);*/
 }
 
 void LogTransfer::LogSystem(const char* src_content,const char* level) const
 {
-	int size=strlen(src_content);
+	/*int size=strlen(src_content);
 	char content[size+1];
 	content[size]='\0';
 	memcpy(content,src_content,(unsigned long int)size);
@@ -84,12 +84,12 @@ void LogTransfer::LogSystem(const char* src_content,const char* level) const
 	char extendLevel[8]={' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0'};
 	memcpy(extendLevel,level,strlen(level));
 	LOGHEAD(extendLevel,"SYS");
-	LOGCONTENT(content);
+	LOGCONTENT(content);*/
 }
 
 void LogTransfer::LogTrans(const char* src_content, int size) const
 {
-	if(size<28) return;
+	/*if(size<28) return;
 	string cmd(src_content+25,3);
 	std::map<std::string,pFuncTranslog>::const_iterator iter = callbacks.find(cmd);
 	if(iter!=callbacks.end())
@@ -99,5 +99,5 @@ void LogTransfer::LogTrans(const char* src_content, int size) const
 		iter->second(src_content, fp_);
 		fputs("]\r\n",fp_);
 		fflush(fp_);
-	}
+	}*/
 }

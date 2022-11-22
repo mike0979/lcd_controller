@@ -10,10 +10,10 @@ using namespace waxberry;
 
 vector<ServerTcpConnection*> ServerTcpConnection::TransferConns;
 const char* ServerTcpConnection::TAG="ServerTcpConnection";
-
+std::map<ServerTcpConnection*,bool> ServerTcpConnection::States;
 ServerTcpConnection::ServerTcpConnection(BasicHost& host) : WaxberryTcpConnection<Message>(host)
 {
-	
+	States[this]=false;
 }
 
 int ServerTcpConnection::OnReadMessage(const char* data, int size)
@@ -98,6 +98,7 @@ void ServerTcpConnection::OnConnected()
 
 void ServerTcpConnection::OnDisconnected()
 {
+	States[this]=true;
 	LogD("%s:%d disconnected\n",RemoteEndpoint().address().to_string().c_str(),RemoteEndpoint().port());
 	if(bj_msg::GetHandlers().count("disconnected")!=0)
 	{
@@ -123,13 +124,14 @@ void ServerTcpConnection::OnDisconnected()
 
 void ServerTcpConnection::Send(const char * buffer, int size, waxberry::MSG_SENT_CALLBACK cb)
 {
-	LogD("send to %s:%d,size:%d,data:%s!!\n",RemoteEndpoint().address().to_string().c_str(),RemoteEndpoint().port(),size,string(buffer,size).c_str());
-	if(State()!=waxberry::CONNECTION_STATE::CON_STATE_CONNECTED)
+	if(States[this])
 	{
-		LogD("but State is:%d\n",State());
+		States.erase(this);
+		//LogD("but State is:%d\n",State());
 		return;
 	}
-	for (std::vector<ServerTcpConnection*>::iterator iter = TransferConns.begin(); iter != TransferConns.end(); ++iter)
+	LogD("send to %s:%d,size:%d,data:%s!!\n",RemoteEndpoint().address().to_string().c_str(),RemoteEndpoint().port(),size,string(buffer,size).c_str());
+	/*for (std::vector<ServerTcpConnection*>::iterator iter = TransferConns.begin(); iter != TransferConns.end(); ++iter)
 	{
 		if((*iter)->State() == waxberry::CONNECTION_STATE::CON_STATE_CONNECTED)
 		{
@@ -138,7 +140,7 @@ void ServerTcpConnection::Send(const char * buffer, int size, waxberry::MSG_SENT
 			(*iter)->Write(temp,strlen(temp));
 			(*iter)->Write(buffer,size);
 		}
-	}
+	}*/
 	Write(buffer,size,cb);
 	LogTransfer::GetInstance().LogSend(buffer,size);
 }

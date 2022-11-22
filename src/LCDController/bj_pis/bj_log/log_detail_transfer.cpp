@@ -226,7 +226,8 @@ LOG_REG_DETAIL(M65)
 	LOG_REG_DETAIL(M32)
 	{
 		int headLen = WriteHeader(content, fp);
-		WriteKV(fp, "设备编号", TcpGetString(content, headLen, 14));
+		int l = strlen(content);
+		WriteKV(fp, "设备编号", TcpGetString(content, headLen, l-headLen-4));
 		WriteKV(fp, "状态发送间隔", TcpGetString(content, headLen, 4));
 	}
 
